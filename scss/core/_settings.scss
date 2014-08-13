@@ -1,0 +1,162 @@
+// Active Media Queries
+// ------------------------------------------------------------
+$MQs: true;
+// $breakpoint-no-queries: true;
+$breakpoint-no-query-fallbacks: true;
+
+
+
+
+// Place any variables that should override SUSY defaults here.
+// ------------------------------------------------------------
+
+$total-columns: 16;
+
+$susy: (
+	// flow: ltr,
+	// math: fluid,
+	// output: float,
+	gutter-position: after,
+	columns: $total-columns,
+	gutters: 1/4,
+	// column-width: false,
+	global-box-sizing: border-box,
+	// last-flow: to,
+	debug: (
+		image: hide,
+		color: rgba(#66f, .25),
+		output: background,
+		toggle: top right,
+	),
+	use-custom: (
+		// background-image: true,
+		// background-options: false,
+		box-sizing: true,
+		// clearfix: false,
+		rem: true,
+	)
+);
+
+
+
+
+// Breakpoint Constants
+// ------------------------------------------------------------
+$bp-fallback				: 0em, $total-columns, '.no-mq';
+
+$bp-navigation				: 36em, $total-columns, '.no-mq';
+$bp-navigation-footer		: 54em, $total-columns, '.no-mq';
+$bp-navigation-footer-norm	: 62em, $total-columns, '.no-mq';
+
+$bp-screen-small			: 40em, $total-columns, '.no-mq';
+
+$bp-page-border				: 48em, 12, '.no-mq';
+$bp-just-stack-it			: 48em, $total-columns, '.no-mq';
+
+$bp-video-columns			: 50em, $total-columns, '.no-mq';
+
+$bp-layout-columns-two		: 40em, 12, '.no-mq';
+$bp-layout-columns-three	: 49em, 12, '.no-mq';
+
+$bp-grid-columns-two		: 38em, 12, '.no-mq';
+$bp-grid-columns-three		: 62em, 12, '.no-mq';
+$bp-grid-columns-four		: 93em, 12;
+$bp-grid-columns-five		: 125em, 12;
+
+$bp-nested-columns-two		: 60em, 8, '.no-mq';
+$bp-nested-columns-three	: 60em, 8, '.no-mq';
+
+$bp-client-grid-two-sml		: 26em, 8, '.no-mq';
+$bp-client-grid-two-lrg		: 40em, 8, '.no-mq';
+$bp-client-grid-one-lrg		: 60em, 8, '.no-mq';
+
+$bp-css-filter				: 40em, $total-columns;
+
+
+
+// element Heights
+$height-global-header : 6.5em;
+$height-global-footer : 2em;
+
+
+
+
+
+
+// SET UP YOUR VARIABLES IN THIS FILE
+
+$_DEBUG: true;
+
+$assetroot: '../assets';
+$font-root: '#{$assetroot}/fonts';
+$img-root: '#{$assetroot}/img';
+
+$legacy-support-for-ie: true;
+// $legacy-support-for-ie6 : $legacy-support-for-ie;
+$legacy-support-for-ie7 : $legacy-support-for-ie;
+$legacy-support-for-ie8 : $legacy-support-for-ie;
+// $breakpoint-raw-output: false;
+
+
+
+
+
+
+// Fonts, measure, leading and typefaces
+// ------------------------------------------------------------
+
+// Fonts size and line height defaults for our calculations
+
+$base-font-size						: 16px; 			// Sets the browser default size. Shouldn't need to change this.
+$base-line-height					: 32px;				// Baseline grid. Set to a sensible, small size.
+$round-to-nearest-half-line			: true; 			// Allows compass to round to  multiples of 0.5x line height
+$rhythm-unit						: "rem"; 			// Sets rhythm unit to rem. Remove to use default em unit.
+
+$browser-default-font-size			: $base-font-size;
+
+// Colours
+// ------------------------------------------------------------
+
+$clr-bg				: #333;
+$clr-hr 	 		: #a6ce39;
+$clr-input			: #999999;
+
+$clr-text-default   : #cccccc;
+
+
+
+
+
+
+
+// Transitions
+// ------------------------------------------------------------
+$default-transition-property 		: all;
+$default-transition-duration 		: 0.5s;
+$default-transition-function 		: ease;
+$default-transition-delay    		: false;
+
+
+
+// Functions for px to em conversions
+// ------------------------------------------------------------
+
+@function emify($target, $context) {
+	 @if $target == 0 { @return 0 }
+	 @return $target / $context + 0em;
+}
+
+// Make px to ems using base-font-size
+// echo as: font-size: em-font(#px);
+
+@function em-font($target, $context: $base-font-size) {
+	 @return emify($target, $context);
+}
+
+
+// Make px to ems using base-line-height
+// echo as: font-size: em-base(#px);
+
+@function em-base($target, $context: $base-line-height) {
+	 @return emify($target, $context);
+}

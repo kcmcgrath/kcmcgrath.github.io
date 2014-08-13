@@ -7,7 +7,7 @@ module.exports = function(grunt) {
 		// Metadata.
 		pkg: grunt.file.readJSON('package.json'),
 		dir: {
-			interm 		: 'interm', 
+			interm 		: 'interm',
 			build 		: '../dist',
 
 			assetDir 	: 'assets',
@@ -19,48 +19,48 @@ module.exports = function(grunt) {
 		},
 
 		// Task configuration.
-		concat: {
-			options: {
-				stripBanners: true
-			},
-			head: {
-				src: [
-					// '<%= dir.assetdir %>/js/lib/picturefill/dist/picturefill.js',
-					// '<%= dir.assetdir %>/lib/modernizr/modernizr.js',
-					'<%= dir.preprocess %>/js/_modernizr-custom.js',
-					'<%= dir.assetdir %>/lib/picturefill/dist/picturefill.js',
-					'<%= dir.assetdir %>/js/comp/_head-*.js'
-				],
-				dest: '<%= dir.preprocess %>/js/head.js'
-			},
-			// foot: {
-			// 	src: [
-			// 		'<%= dir.assetdir %>/js/lib/respond/src/respond.js',
-			// 		'<%= dir.assetdir %>/js/component/_foot_*.js'
-			// 	],
-			// 	dest: '<%= dir.preprocess %>/js/foot.js'
-			// },
-			ie: {
-				src: [
-					'<%= dir.assetdir %>/lib/selectivizr/selectivizr.js',
-					// '<%= dir.assetdir %>/lib/rem-unit-polyfill/js/rem.js',
-				],
-				dest: '<%= dir.preprocess %>/js/ie.js'
-			}
-		},
+		// concat: {
+		// 	options: {
+		// 		stripBanners: true
+		// 	},
+		// 	head: {
+		// 		src: [
+		// 			// '<%= dir.assetdir %>/js/lib/picturefill/dist/picturefill.js',
+		// 			// '<%= dir.assetdir %>/lib/modernizr/modernizr.js',
+		// 			'<%= dir.preprocess %>/js/_modernizr-custom.js',
+		// 			'<%= dir.assetdir %>/lib/picturefill/dist/picturefill.js',
+		// 			'<%= dir.assetdir %>/js/comp/_head-*.js'
+		// 		],
+		// 		dest: '<%= dir.preprocess %>/js/head.js'
+		// 	},
+		// 	// foot: {
+		// 	// 	src: [
+		// 	// 		'<%= dir.assetdir %>/js/lib/respond/src/respond.js',
+		// 	// 		'<%= dir.assetdir %>/js/component/_foot_*.js'
+		// 	// 	],
+		// 	// 	dest: '<%= dir.preprocess %>/js/foot.js'
+		// 	// },
+		// 	ie: {
+		// 		src: [
+		// 			'<%= dir.assetdir %>/lib/selectivizr/selectivizr.js',
+		// 			// '<%= dir.assetdir %>/lib/rem-unit-polyfill/js/rem.js',
+		// 		],
+		// 		dest: '<%= dir.preprocess %>/js/ie.js'
+		// 	}
+		// },
 
-		uglify: {
-			options: {},
-			dist: {
-				files: [{
-					expand: true,
-					cwd: '<%= dir.preprocess %>/js/',
-					src: ['**/*.js', '!**/_*.js'],
-					dest: '<%= dir.assetdir %>/js/min/',
-					ext: '.min.js'
-				}]
-			}
-		},
+		// uglify: {
+		// 	options: {},
+		// 	dist: {
+		// 		files: [{
+		// 			expand: true,
+		// 			cwd: '<%= dir.preprocess %>/js/',
+		// 			src: ['**/*.js', '!**/_*.js'],
+		// 			dest: '<%= dir.assetdir %>/js/min/',
+		// 			ext: '.min.js'
+		// 		}]
+		// 	}
+		// },
 
 		jshint: {
 			gruntfile: {
@@ -89,10 +89,10 @@ module.exports = function(grunt) {
 			// 	files: '<%= jshint.javascript.src %>',
 			// 	tasks: ['jshint:javascript']
 			// },
-			// compass: {
-			// 	files: '<%= dir.scssDir %>/**/*.scss',
-			// 	tasks: ['compass']
-			// },
+			compass: {
+				files: '<%= dir.scssDir %>/**/*.scss',
+				tasks: ['builddev']
+			},
 			// svg: {
 			// 	files: '.preprocess/svg/*',
 			// 	tasks: ['svg']
@@ -112,16 +112,24 @@ module.exports = function(grunt) {
 		},
 
 		compass: {
-			dev: {
+			interm: {
 				options: {
 					force: true,
 					require: 'susy',
 					config: 'config.rb',
-					// importPath: ['bower_components/foundation/scss'],
-					sassDir: '.preprocess/scss',
-					cssDir: '<%= dir.assetdir %>/css'
+					sassDir: '<%= dir.scssDir %>',
+					cssDir: '<%= dir.interm %>/<%= dir.assetDir %>/<%= dir.cssDir %>'
 				}
 			},
+			build: {
+				options: {
+					force: true,
+					require: 'susy',
+					config: 'config.rb',
+					sassDir: '<%= dir.scssDir %>',
+					cssDir: '<%= dir.build %>/<%= dir.assetDir %>/<%= dir.cssDir %>'
+				}
+			}
 		},
 
 		requirejs: {
@@ -203,22 +211,10 @@ module.exports = function(grunt) {
 		// 	}
 		// },
 
-		// useminPrepare: {
-		// 	html: '<%= dir.build %>/index.html'
-		// },
-
 		clean: {
-			// images: [
-			// 	'<%= dir.build %>/assets/img/*.{png,jpg,gif}',
-			// 	'<%= dir.build %>/assets/img/people/**/*',
-			// 	'<%= dir.build %>/assets/img/work/**/*',
-			// 	// '<%= dir.build %>/assets/img/site/**/*',
-			// ],
-			// svg: [
-			// 	'<%= dir.build %>/assets/icons/*',
-			// ],
 			interm: [
-				//"<%= dir.interm %>/*" 
+				"<%= assemble.interm.files[0].dest %>/**/*.html",
+				"<%= compass.interm.options.cssDir %>"
 			]
 		},
 
@@ -249,70 +245,16 @@ module.exports = function(grunt) {
 					ext: '.html',   // Dest filepaths will have this extension.
 				}]
 			},
-			build 	: {}
-		},
-
-
-		modernizr: {
-
-			dist: {
-			    // [REQUIRED] Path to the build you're using for development.
-			    "devFile" : "<%= dir.assetdir %>/lib/modernizr/modernizr.js",
-
-			    // [REQUIRED] Path to save out the built file.
-			    "outputFile" : "<%= dir.preprocess %>/js/_modernizr-custom.js",
-
-			    // Based on default settings on http://modernizr.com/download/
-			    "extra" : {
-			        "shiv" : true,
-			        "printshiv" : false,
-			        "load" : true,
-			        "mq" : true,
-			        "cssclasses" : true
-			    },
-
-			    // Based on default settings on http://modernizr.com/download/
-			    "extensibility" : {
-			        "addtest" : false,
-			        "prefixed" : false,
-			        "teststyles" : false,
-			        "testprops" : false,
-			        "testallprops" : false,
-			        "hasevents" : false,
-			        "prefixes" : false,
-			        "domprefixes" : false
-			    },
-
-			    // By default, source is uglified before saving
-			    "uglify" : true,
-
-			    // Define any tests you want to implicitly include.
-			    "tests" : [],
-
-			    // By default, this task will crawl your project for references to Modernizr tests.
-			    // Set to false to disable.
-			    // "parseFiles" : true,
-
-			    // When parseFiles = true, this task will crawl all *.js, *.css, *.scss files, except files that are in node_modules/.
-			    // You can override this by defining a "files" array below.
-			    "files" : {
-			        "src": [
-						'<%= dir.preprocess %>/**/*.*',
-						'!<%= dir.preprocess %>/js/*.*',
-						'<%= dir.assetdir %>/js/**/*.*',
-						'!<%= dir.assetdir %>/js/min/*.*'
-			        ]
-			    },
-
-			    // When parseFiles = true, matchCommunityTests = true will attempt to
-			    // match user-contributed tests.
-			    "matchCommunityTests" : true,
-
-			    // Have custom Modernizr tests? Add paths to their location here.
-			    "customTests" : []
+			build 	: {
+				files: [{
+					expand: true,     // Enable dynamic expansion.
+					cwd: '<%= dir.htmlDir %>/pages/',      // Src matches are relative to this path.
+					src: ['**/*.hbs'], // Actual pattern(s) to match.
+					dest: '<%= dir.build %>/',   // Destination path prefix.
+					ext: '.html',   // Dest filepaths will have this extension.
+				}]
 			}
-
-		}
+		},
 	});
 
 	// These plugins provide necessary tasks.
@@ -333,34 +275,26 @@ module.exports = function(grunt) {
 
 	grunt.loadNpmTasks('assemble');
 
-	grunt.loadNpmTasks("grunt-modernizr");
 
 	// svg task
 	grunt.registerTask('svg', ['clean:svg' , 'grunticon']);
 
 	
-	grunt.registerTask('builddev', ['clean:interm','assemble:interm']);
-	//grunt.registerTask('build', ['clean:build','assemble']);
+	// INTERM BUILD
+	grunt.registerTask('builddev', ['clean:interm','compass:interm','assemble:interm']);
+	
 
-	// grunt.registerTask('build', [
-	// 	'useminPrepare',
-	// 	'concat',
-	// 	'cssmin',
-	// 	'uglify',
-	// 	'filerev',
-	// 	'usemin'
-	// ]);
+	// DIST BUILD
+	grunt.registerTask('build', ['assemble:build']);
 
-	// htmlconcat task
-	// grunt.registerTask('scaffolding', ['includereplace:scaffolding']);
 
 	// images
-	// grunt.registerTask('images', ['clean:images', 'responsive_images', 'imagemin', 'svg']);
-	grunt.registerTask('images', ['clean:images', 'imagemin', 'responsive_images', 'svg']);
-	//grunt.registerTask('imagetest', ['responsive_images']);
+	// grunt.registerTask('images', ['clean:images', 'imagemin', 'responsive_images', 'svg']);
+
 
 	//js concat and uglify
-	grunt.registerTask('scripts', ['modernizr', 'concat', 'uglify', 'requirejs']);
+	// grunt.registerTask('scripts', ['modernizr', 'concat', 'uglify', 'requirejs']);
+
 
 	// Default task.
 	grunt.registerTask('default', ['watch']);

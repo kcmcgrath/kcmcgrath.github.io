@@ -17,5 +17,7 @@
     "trailing": true,
     "quotmark": "single",
     "undef": true,
-    "unused": true
+    "unused": true,
+    "-W099" : true,
+    "-W109" : true
 }
