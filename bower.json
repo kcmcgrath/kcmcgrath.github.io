@@ -1,0 +1,14 @@
+{
+  "name": "kevinmcgrath",
+  "version": "0.9.0",
+  "dependencies": {
+    "modernizr": "~2.8.2",
+    "jquery": "~2.1.1",
+    "jquery-ie": "git://github.com/jquery/jquery.git#1.11.1",
+    "jquery-1.9.1": "http://code.jquery.com/jquery-1.9.1.js",
+    "requirejs": "~2.1.14",
+    "almond": "~0.2.9",
+    "picturefill": "~2.0.0",
+    "selectivizr": "git://github.com/keithclark/selectivizr.git#ed2f5e3e56f059ad256cc921e24ecc0e1855f18a"
+  }
+}
