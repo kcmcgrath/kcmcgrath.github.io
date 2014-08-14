@@ -7,6 +7,7 @@ module.exports = function(grunt) {
 		// Metadata.
 		pkg: grunt.file.readJSON('package.json'),
 		dir: {
+			temp 		: '.tmp',
 			interm 		: 'interm',
 			build 		: '../dist',
 
@@ -14,53 +15,76 @@ module.exports = function(grunt) {
 
 			htmlDir 	: 'html',
 			jsDir 		: 'js',
+			jsLibDir 	: 'lib',
 			scssDir 	: 'scss',
 			cssDir 		: 'css'
 		},
 
-		// Task configuration.
-		// concat: {
-		// 	options: {
-		// 		stripBanners: true
-		// 	},
-		// 	head: {
-		// 		src: [
-		// 			// '<%= dir.assetdir %>/js/lib/picturefill/dist/picturefill.js',
-		// 			// '<%= dir.assetdir %>/lib/modernizr/modernizr.js',
-		// 			'<%= dir.preprocess %>/js/_modernizr-custom.js',
-		// 			'<%= dir.assetdir %>/lib/picturefill/dist/picturefill.js',
-		// 			'<%= dir.assetdir %>/js/comp/_head-*.js'
-		// 		],
-		// 		dest: '<%= dir.preprocess %>/js/head.js'
-		// 	},
-		// 	// foot: {
-		// 	// 	src: [
-		// 	// 		'<%= dir.assetdir %>/js/lib/respond/src/respond.js',
-		// 	// 		'<%= dir.assetdir %>/js/component/_foot_*.js'
-		// 	// 	],
-		// 	// 	dest: '<%= dir.preprocess %>/js/foot.js'
-		// 	// },
-		// 	ie: {
-		// 		src: [
-		// 			'<%= dir.assetdir %>/lib/selectivizr/selectivizr.js',
-		// 			// '<%= dir.assetdir %>/lib/rem-unit-polyfill/js/rem.js',
-		// 		],
-		// 		dest: '<%= dir.preprocess %>/js/ie.js'
-		// 	}
-		// },
+		copy: {
+			interm: {
+				files: [
+					// includes files within path and its sub-directories
+					{
+						expand: true, 
+						src: ['<%= dir.jsDir %>/**', '<%= dir.jsLibDir %>/**'], 
+						dest: '<%= dir.interm %>/'
+					}
+				]
+			}
+		},
 
-		// uglify: {
-		// 	options: {},
-		// 	dist: {
-		// 		files: [{
-		// 			expand: true,
-		// 			cwd: '<%= dir.preprocess %>/js/',
-		// 			src: ['**/*.js', '!**/_*.js'],
-		// 			dest: '<%= dir.assetdir %>/js/min/',
-		// 			ext: '.min.js'
-		// 		}]
-		// 	}
-		// },
+		// Task configuration.
+		concat: {
+			options: {
+				stripBanners: true
+			},
+			head: {
+				src: [
+					// '<%= dir.jsLibDir %>/picturefill/dist/picturefill.js',
+					'<%= dir.jsLibDir %>/modernizr/modernizr.js',
+					// '<%= dir.jsLibDir %>/js/_modernizr-custom.js',
+					// '<%= dir.jsLibDir %>/picturefill/dist/picturefill.js',
+					'<%= dir.assetdir %>/js/comp/_head-*.js'
+				],
+				dest: '<%= dir.temp %>/js/head.js'
+			},
+			// foot: {
+			// 	src: [
+			// 		'<%= dir.assetdir %>/js/lib/respond/src/respond.js',
+			// 		'<%= dir.assetdir %>/js/component/_foot_*.js'
+			// 	],
+			// 	dest: '<%= dir.temp %>/js/foot.js'
+			// },
+			// ie: {
+			// 	src: [
+			// 		'<%= dir.assetdir %>/lib/selectivizr/selectivizr.js',
+			// 		// '<%= dir.assetdir %>/lib/rem-unit-polyfill/js/rem.js',
+			// 	],
+			// 	dest: '<%= dir.temp %>/js/ie.js'
+			// }
+		},
+
+		uglify: {
+			options: {},
+			interm: {
+				files: [{
+					expand: true,
+					cwd: '<%= dir.temp %>/js/',
+					src: ['**/*.js', '!**/_*.js'],
+					dest: '<%= dir.interm %>/<%= dir.assetDir %>/js/',
+					ext: '.min.js'
+				}]
+			},
+			build: {
+				files: [{
+					expand: true,
+					cwd: '<%= dir.temp %>/js/',
+					src: ['**/*.js', '!**/_*.js'],
+					dest: '<%= dir.build %>/<%= dir.assetDir %>/js/',
+					ext: '.min.js'
+				}]
+			}
+		},
 
 		jshint: {
 			gruntfile: {
@@ -101,10 +125,10 @@ module.exports = function(grunt) {
 				files: ['<%= dir.htmlDir %>/**/*'],
 				tasks: ['builddev']
 			},
-			// scripts: {
-			// 	files: ['<%= dir.assetdir %>/js/*.js', '<%= dir.assetdir %>/js/comp/*.js'],
-			// 	tasks: ['scripts']
-			// },
+			scripts: {
+				files: ['<%= dir.jsDir %>/*.js', '<%= dir.jsDir %>/comp/*.js'],
+				tasks: ['scripts']
+			},
 			// responsiveimages: {
 			// 	files: '.preprocess/images/people/*.*',
 			// 	tasks: ['images']
@@ -133,12 +157,12 @@ module.exports = function(grunt) {
 		},
 
 		requirejs: {
-			main: {
+			build: {
 	            options: {
-	                baseUrl: '<%= dir.assetdir %>/',                         // Path of source scripts, relative to this build file
-	                mainConfigFile: '<%= dir.assetdir %>/js/_config.js',         // Path of shared configuration file, relative to this build file
+	                baseUrl: './',                         // Path of source scripts, relative to this build file
+	                mainConfigFile: '<%= dir.jsDir %>/_config.js',         // Path of shared configuration file, relative to this build file
 	                name: 'lib/almond/almond', //'App',                                                                    // Name of input script (.js extension inferred)
-	                out: '<%= dir.assetdir %>/js/min/app.min.js',                    // Path of built script output
+	                out: '<%= dir.build %>/<%= dir.assetDir %>/js/app.min.js',                    // Path of built script output
 	                include: 'js/_main',
 
 	                fileExclusionRegExp: /.svn/,                                                    // Ignore all files matching this pattern
@@ -149,7 +173,6 @@ module.exports = function(grunt) {
 	                },
 
 	                optimize: 'uglify2',
-	                // optimize: 'uglify2',                                                            // Use 'none' If you do not want to uglify.
 	                uglify2: {
 	                    output: {
 	                        beautify: false,
@@ -163,11 +186,7 @@ module.exports = function(grunt) {
 	                    },
 	                    warnings: false,
 	                    mangle: true
-	                },
-
-	                excludeShallow: [
-						"logo"
-					]
+	                }
 	            }
 	        }
 		},
@@ -214,10 +233,19 @@ module.exports = function(grunt) {
 		clean: {
 			interm: [
 				"<%= assemble.interm.files[0].dest %>/**/*.html",
-				"<%= compass.interm.options.cssDir %>"
+				"<%= compass.interm.options.cssDir %>",
+				"<%= dir.interm %>/<%= dir.jsDir %>",
+				"<%= dir.interm %>/<%= dir.jsLibDir %>"
+			],
+			build: [
+				"!<%= dir.build %>/.git",
+				"<%= assemble.build.files[0].dest %>/**/*.html",
+				"<%= compass.build.options.cssDir %>"
 			]
 		},
 
+		assembleSettings_build: grunt.file.readJSON( 'html/data/_interm.json' ),
+		assembleSettings_dist: grunt.file.readJSON( 'html/data/_dist.json' ),
 		assemble: {
 			// Task-level options.
 			options: {
@@ -228,7 +256,6 @@ module.exports = function(grunt) {
 				layout: '<%= dir.htmlDir %>/layouts/default.hbs',
 				partials: '<%= dir.htmlDir %>/partials/*.hbs',
 				helpers: ['<%= dir.htmlDir %>/helpers/helper-*.js', 'handlebars-helpers'],
-				data: '<%= dir.htmlDir %>/data/*.{json,yml}',
 
 				// Pattern Lab templates
 				patterns: {
@@ -237,6 +264,9 @@ module.exports = function(grunt) {
 				}
 			},
 			interm: {
+				options: {
+					settings: '<%= assembleSettings_build %>'
+				},
 				files: [{
 					expand: true,     // Enable dynamic expansion.
 					cwd: '<%= dir.htmlDir %>/pages/',      // Src matches are relative to this path.
@@ -246,6 +276,9 @@ module.exports = function(grunt) {
 				}]
 			},
 			build 	: {
+				options: {
+					settings: '<%= assembleSettings_dist %>'
+				},
 				files: [{
 					expand: true,     // Enable dynamic expansion.
 					cwd: '<%= dir.htmlDir %>/pages/',      // Src matches are relative to this path.
@@ -264,6 +297,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-compass');
 	grunt.loadNpmTasks('grunt-contrib-clean');
+	grunt.loadNpmTasks('grunt-contrib-copy');
 
 	grunt.loadNpmTasks('grunt-responsive-images');
 	grunt.loadNpmTasks('grunt-contrib-imagemin');
@@ -277,23 +311,30 @@ module.exports = function(grunt) {
 
 
 	// svg task
-	grunt.registerTask('svg', ['clean:svg' , 'grunticon']);
+	// grunt.registerTask('svg', ['clean:svg' , 'grunticon']);
+	
+	
+	// js concat and uglify
+	grunt.registerTask('scripts', ['copy:interm', 'concat', 'uglify:interm']);
 
 	
 	// INTERM BUILD
-	grunt.registerTask('builddev', ['clean:interm','compass:interm','assemble:interm']);
+	grunt.registerTask('builddev', ['clean:interm', 'copy:interm', 'compass:interm', 'assemble:interm']);
 	
 
 	// DIST BUILD
-	grunt.registerTask('build', ['assemble:build']);
+	grunt.registerTask('build', [
+		'clean:build',
+		'concat',
+		'uglify:build',
+		'requirejs:build',
+		'compass:build',
+		'assemble:build'
+	]);
 
 
 	// images
 	// grunt.registerTask('images', ['clean:images', 'imagemin', 'responsive_images', 'svg']);
-
-
-	//js concat and uglify
-	// grunt.registerTask('scripts', ['modernizr', 'concat', 'uglify', 'requirejs']);
 
 
 	// Default task.
