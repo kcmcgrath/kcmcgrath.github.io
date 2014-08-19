@@ -299,6 +299,18 @@ module.exports = function(grunt) {
 				}]
 			}
 		},
+
+
+		browserSync: {
+		    bsFiles: {
+		        src : '<%= dir.interm %>/**/*.*'
+		    },
+		    options: {
+            	proxy: "local.kcmcgrath.com",
+            	open: "external"
+		    }
+
+		}
 	});
 
 	// These plugins provide necessary tasks.
@@ -319,6 +331,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-grunticon');
 
 	grunt.loadNpmTasks('assemble');
+
+	grunt.loadNpmTasks('grunt-browser-sync');
 
 
 	// svg task
