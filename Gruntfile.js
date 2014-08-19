@@ -30,6 +30,16 @@ module.exports = function(grunt) {
 						dest: '<%= dir.interm %>/'
 					}
 				]
+			},
+			build: {
+				files: [
+					// includes files within path and its sub-directories
+					{
+						expand: true, 
+						src: ['<%= dir.jsDir %>/**', '<%= dir.jsLibDir %>/**'], 
+						dest: '<%= dir.interm %>/'
+					}
+				]
 			}
 		},
 
@@ -40,10 +50,11 @@ module.exports = function(grunt) {
 			},
 			head: {
 				src: [
-					// '<%= dir.jsLibDir %>/picturefill/dist/picturefill.js',
 					'<%= dir.jsLibDir %>/modernizr/modernizr.js',
 					// '<%= dir.jsLibDir %>/js/_modernizr-custom.js',
 					// '<%= dir.jsLibDir %>/picturefill/dist/picturefill.js',
+					// '<%= dir.jsLibDir %>/requirejs/require.js',
+					// '<%= dir.jsDir %>/_config.js',
 					'<%= dir.assetdir %>/js/comp/_head-*.js'
 				],
 				dest: '<%= dir.temp %>/js/head.js'
