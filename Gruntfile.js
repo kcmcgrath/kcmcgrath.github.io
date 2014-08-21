@@ -303,7 +303,9 @@ module.exports = function(grunt) {
 
 		browserSync: {
 		    bsFiles: {
-		        src : '<%= dir.interm %>/**/*.*'
+		        src : [
+		        	'<%= dir.interm %>/<%= dir.assetDir %>/<%= dir.cssDir %>/**/*.css'
+		        ]
 		    },
 		    options: {
             	proxy: "local.kcmcgrath.com",
