@@ -1,4 +1,5 @@
 /*global module:false*/
+"use strict";
 
 module.exports = function(grunt) {
 
@@ -25,8 +26,8 @@ module.exports = function(grunt) {
 				files: [
 					// includes files within path and its sub-directories
 					{
-						expand: true, 
-						src: ['<%= dir.jsDir %>/**', '<%= dir.jsLibDir %>/**'], 
+						expand: true,
+						src: ['<%= dir.jsDir %>/**', '<%= dir.jsLibDir %>/**'],
 						dest: '<%= dir.interm %>/'
 					}
 				]
@@ -35,8 +36,8 @@ module.exports = function(grunt) {
 				files: [
 					// includes files within path and its sub-directories
 					{
-						expand: true, 
-						src: ['<%= dir.jsDir %>/**', '<%= dir.jsLibDir %>/**'], 
+						expand: true,
+						src: ['<%= dir.jsDir %>/**', '<%= dir.jsLibDir %>/**'],
 						dest: '<%= dir.interm %>/'
 					}
 				]
@@ -58,21 +59,7 @@ module.exports = function(grunt) {
 					'<%= dir.assetdir %>/js/comp/_head-*.js'
 				],
 				dest: '<%= dir.temp %>/js/head.js'
-			},
-			// foot: {
-			// 	src: [
-			// 		'<%= dir.assetdir %>/js/lib/respond/src/respond.js',
-			// 		'<%= dir.assetdir %>/js/component/_foot_*.js'
-			// 	],
-			// 	dest: '<%= dir.temp %>/js/foot.js'
-			// },
-			// ie: {
-			// 	src: [
-			// 		'<%= dir.assetdir %>/lib/selectivizr/selectivizr.js',
-			// 		// '<%= dir.assetdir %>/lib/rem-unit-polyfill/js/rem.js',
-			// 	],
-			// 	dest: '<%= dir.temp %>/js/ie.js'
-			// }
+			}
 		},
 
 		uglify: {
@@ -139,11 +126,7 @@ module.exports = function(grunt) {
 			scripts: {
 				files: ['<%= dir.jsDir %>/*.js', '<%= dir.jsDir %>/comp/*.js'],
 				tasks: ['scripts']
-			},
-			// responsiveimages: {
-			// 	files: '.preprocess/images/people/*.*',
-			// 	tasks: ['images']
-			// }
+			}
 		},
 
 		compass: {
@@ -202,25 +185,6 @@ module.exports = function(grunt) {
 	        }
 		},
 
-		// imagemin: {                          // Task
-		// 	dynamic: {                         // Another target
-		// 	  files: [{
-		// 	    expand: true,
-		// 	    cwd: '.preprocess/images/work',
-		// 	    src: ['**/*.{png,jpg,gif}'],
-		// 	    dest: '<%= dir.assetdir %>/img/work'                  // Destination path prefix
-		// 	  }]
-		// 	},
-		// 	core: {                         // Another target
-		// 	  files: [{
-		// 	    expand: true,
-		// 	    cwd: '.preprocess/images',
-		// 	    src: ['*.{png,jpg,gif}'],
-		// 	    dest: '<%= dir.assetdir %>/img'                  // Destination path prefix
-		// 	  }]
-		// 	}
-		// },
-
 		// grunticon: {
 		// 	dist: {
 		// 		options: {
@@ -255,8 +219,8 @@ module.exports = function(grunt) {
 			]
 		},
 
-		assembleSettings_build: grunt.file.readJSON( 'html/data/_interm.json' ),
-		assembleSettings_dist: grunt.file.readJSON( 'html/data/_dist.json' ),
+		assembleSettings_Build: grunt.file.readJSON( 'html/data/_interm.json' ),
+		assembleSettings_Dist: grunt.file.readJSON( 'html/data/_dist.json' ),
 		assemble: {
 			// Task-level options.
 			options: {
@@ -276,7 +240,7 @@ module.exports = function(grunt) {
 			},
 			interm: {
 				options: {
-					settings: '<%= assembleSettings_build %>'
+					settings: '<%= assembleSettings_Build %>'
 				},
 				files: [{
 					expand: true,     // Enable dynamic expansion.
@@ -288,7 +252,7 @@ module.exports = function(grunt) {
 			},
 			build 	: {
 				options: {
-					settings: '<%= assembleSettings_dist %>'
+					settings: '<%= assembleSettings_Dist %>'
 				},
 				files: [{
 					expand: true,     // Enable dynamic expansion.
